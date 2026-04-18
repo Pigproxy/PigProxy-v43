@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="__alloy_style.css" rel="stylesheet">
+  <title>Login - PigProxy</title>
+</head>
+<body>
+<main class="pp-shell">
+  <section class="pp-card pp-card-auth">
+    <a href="/" class="pp-brand-lockup">
+      <img class="pp-brand-art" src="images/pig-mascot.svg" alt="PigProxy mascot">
+      <div class="pp-brand-text">
+        <div class="pp-wordmark"><span class="pig">Pig</span><span class="proxy">Proxy</span></div>
+        <p class="pp-tagline">snout your way through the web</p>
+      </div>
+    </a>
+
+    <div class="pp-divider"></div>
+
+    <div class="pp-hero-copy">
+      <span class="pp-pill">Welcome back</span>
+      <h1 class="pp-section-title">Jump back into the pig pen.</h1>
+      <p class="pp-section-copy">
+        Sign in to open your dashboard, use quick shortcuts, and browse with school-appropriate filters.
+      </p>
+    </div>
+
+    <div id="error" class="pp-alert pp-alert-error"></div>
+
+    <p class="pp-label">Sign in to your account</p>
+    <form method="POST" action="/login">
+      <div class="pp-field">
+        <svg class="pp-field-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <input class="pp-input" type="text" name="username" placeholder="Username" autocomplete="username" required>
+      </div>
+
+      <div class="pp-field">
+        <svg class="pp-field-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <input class="pp-input" type="password" name="password" placeholder="Password" autocomplete="current-password" required>
+      </div>
+
+      <button class="pp-btn" type="submit">Sign In</button>
+    </form>
+
+    <div class="pp-note-card">
+      <strong>Tip.</strong> Use a username you will remember—this is what appears on your dashboard.
+    </div>
+
+    <a href="/signup" class="pp-link">Need an account? <span class="pp-link-accent">Create one free</span></a>
+  </section>
+</main>
+<script>
+  const e = new URLSearchParams(location.search).get('error');
+  if (e) document.getElementById('error').textContent = e;
+</script>
+</body>
+</html>

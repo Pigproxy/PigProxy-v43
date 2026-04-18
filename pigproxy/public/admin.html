@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="__alloy_style.css" rel="stylesheet">
+  <title>Admin - PigProxy</title>
+</head>
+<body class="pp-top-page">
+<main class="pp-shell">
+  <section class="pp-card pp-card-wide">
+    <div class="pp-header">
+      <a href="/secret" class="pp-brand-lockup">
+        <img class="pp-brand-art" src="images/pig-mascot.svg" alt="PigProxy mascot">
+        <div class="pp-brand-text">
+          <div class="pp-wordmark"><span class="pig">Pig</span><span class="proxy">Proxy</span></div>
+          <p class="pp-tagline">snout your way through the web</p>
+        </div>
+      </a>
+      <span class="pp-badge pp-badge-accent">Admin</span>
+    </div>
+
+    <div class="pp-dashboard-banner">
+      <p class="pp-label">Control room</p>
+      <h1 class="pp-section-title-sm">Manage registered users</h1>
+      <p class="pp-section-copy">
+        Review registered accounts and remove access when needed. Delete actions are explicit; the built-in admin account stays protected.
+      </p>
+
+      <div class="pp-chip-row">
+        <span class="pp-chip"><span id="user-count">0</span>&nbsp;total users</span>
+        <span class="pp-chip">admin stays protected</span>
+      </div>
+    </div>
+
+    <p class="pp-label">Registered users</p>
+    <div class="pp-table-wrap">
+      <table class="pp-table" id="user-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="user-list">
+          <tr>
+            <td colspan="3" class="pp-empty">Loading users...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pp-note-card">
+      <strong>Quick note.</strong> Deleting a member removes their access, but the built-in admin account remains protected.
+    </div>
+
+    <div class="pp-inline-actions">
+      <a href="/secret" class="pp-btn-ghost pp-btn-inline">Back to Dashboard</a>
+    </div>
+  </section>
+</main>
+<script>
+  fetch('/admin/users')
+    .then(r => r.json())
+    .then(users => {
+      const tbody = document.getElementById('user-list');
+      document.getElementById('user-count').textContent = users.length;
+      tbody.innerHTML = '';
+
+      users.forEach(u => {
+        const tr = document.createElement('tr');
+        const isAdmin = u === 'admin';
+        tr.innerHTML = `
+          <td class="pp-table-user">${u}</td>
+          <td>${isAdmin ? '<span class="pp-badge pp-badge-accent">Admin</span>' : '<span class="pp-badge pp-badge-safe">Member</span>'}</td>
+          <td>${isAdmin ? '<span class="pp-empty">Protected</span>' : `
+            <form method="POST" action="/admin/delete-user" style="display:inline;">
+              <input type="hidden" name="username" value="${u}">
+              <button class="pp-delete-btn" type="submit">Delete</button>
+            </form>`}
+          </td>`;
+        tbody.appendChild(tr);
+      });
+
+      if (!users.length) {
+        tbody.innerHTML = '<tr><td colspan="3" class="pp-empty">No users found.</td></tr>';
+      }
+    })
+    .catch(() => {
+      document.getElementById('user-list').innerHTML = '<tr><td colspan="3" class="pp-empty" style="color: var(--danger);">Failed to load users.</td></tr>';
+    });
+</script>
+</body>
+</html>

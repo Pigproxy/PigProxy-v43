@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" fill="none">
+  <defs>
+    <linearGradient id="pig-face" x1="110" y1="30" x2="110" y2="182" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE2EC"/>
+      <stop offset="1" stop-color="#FF9DC4"/>
+    </linearGradient>
+    <linearGradient id="pig-ear" x1="48" y1="40" x2="76" y2="96" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD8E7"/>
+      <stop offset="1" stop-color="#FF8CB8"/>
+    </linearGradient>
+    <linearGradient id="pig-ear-right" x1="172" y1="40" x2="144" y2="96" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD8E7"/>
+      <stop offset="1" stop-color="#FF8CB8"/>
+    </linearGradient>
+    <linearGradient id="snout" x1="110" y1="102" x2="110" y2="147" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFB7D0"/>
+      <stop offset="1" stop-color="#FF7EAE"/>
+    </linearGradient>
+    <linearGradient id="glasses" x1="61" y1="75" x2="161" y2="115" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#23334F"/>
+      <stop offset="1" stop-color="#0D172B"/>
+    </linearGradient>
+    <linearGradient id="cable" x1="25" y1="148" x2="194" y2="150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#33C36C"/>
+      <stop offset="1" stop-color="#15A34A"/>
+    </linearGradient>
+    <linearGradient id="plug" x1="160" y1="142" x2="201" y2="175" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE083"/>
+      <stop offset="1" stop-color="#FFC839"/>
+    </linearGradient>
+  </defs>
+  <circle cx="110" cy="110" r="94" fill="#FFF6FA"/>
+  <path d="M64 52C46 28 31 32 28 56C25 75 35 91 55 98L74 92L64 52Z" fill="url(#pig-ear)" stroke="#172C5B" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M156 52C174 28 189 32 192 56C195 75 185 91 165 98L146 92L156 52Z" fill="url(#pig-ear-right)" stroke="#172C5B" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M40 108C40 63 71 34 110 34C149 34 180 63 180 108C180 151 149 182 110 182C71 182 40 151 40 108Z" fill="url(#pig-face)" stroke="#172C5B" stroke-width="6"/>
+  <path d="M58 131C65 149 81 160 99 164" stroke="#FFBCD4" stroke-width="12" stroke-linecap="round" opacity="0.75"/>
+  <path d="M162 131C155 149 139 160 121 164" stroke="#FFBCD4" stroke-width="12" stroke-linecap="round" opacity="0.75"/>
+  <rect x="57" y="78" width="48" height="36" rx="15" fill="url(#glasses)" stroke="#172C5B" stroke-width="6"/>
+  <rect x="115" y="78" width="48" height="36" rx="15" fill="url(#glasses)" stroke="#172C5B" stroke-width="6"/>
+  <path d="M105 94H115" stroke="#172C5B" stroke-width="7" stroke-linecap="round"/>
+  <path d="M67 88C75 78 92 76 101 84" stroke="#B7C7DB" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+  <path d="M125 88C133 78 150 76 159 84" stroke="#B7C7DB" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+  <ellipse cx="110" cy="124" rx="34" ry="24" fill="url(#snout)" stroke="#172C5B" stroke-width="6"/>
+  <ellipse cx="96" cy="126" rx="7" ry="10" fill="#D65C8B"/>
+  <ellipse cx="124" cy="126" rx="7" ry="10" fill="#D65C8B"/>
+  <path d="M92 150C101 159 118 159 128 151" stroke="#A83E68" stroke-width="6" stroke-linecap="round"/>
+  <path d="M25 148C57 139 83 136 109 136C138 136 163 140 194 150" stroke="url(#cable)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M172 142L201 151L189 175L160 166L172 142Z" fill="url(#plug)" stroke="#172C5B" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M183 150L190 152" stroke="#172C5B" stroke-width="4" stroke-linecap="round"/>
+  <path d="M180 157L188 159" stroke="#172C5B" stroke-width="4" stroke-linecap="round"/>
+  <path d="M82 173C86 184 94 192 103 192C111 192 116 188 116 180C116 173 111 168 104 168H88C82 168 80 169 82 173Z" fill="#FFD0E0" stroke="#172C5B" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M138 173C134 184 126 192 117 192C109 192 104 188 104 180C104 173 109 168 116 168H132C138 168 140 169 138 173Z" fill="#FFD0E0" stroke="#172C5B" stroke-width="5" stroke-linejoin="round"/>
+</svg>

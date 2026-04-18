@@ -1,0 +1,7 @@
+{
+  "name": "AC Proxy",
+  "description": "A node.js web proxy featuring URL encoding, and amazing compatablity!",
+  "repository": "https://github.com/titaniumnetwork-dev/alloyproxy/",
+  "logo": "",
+  "keywords": ["node", "proxy", "unblocker"]
+}

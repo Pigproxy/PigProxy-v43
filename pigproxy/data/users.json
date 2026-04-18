@@ -1,0 +1,8 @@
+{
+  "users": {
+    "admin": {
+      "password": "edbb41cfd2eb15b1c1f30caf26250415f373024f82640a1963c0c1f098cddf57",
+      "salt": "19f58d1506da9ea25c77cff835202e1b"
+    }
+  }
+}
