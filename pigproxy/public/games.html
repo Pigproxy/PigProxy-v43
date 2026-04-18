@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/__alloy_style.css" rel="stylesheet">
+  <title>Games & Downloads - PigProxy</title>
+  <style>
+    .pp-game-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pp-game-card {
+      position: relative;
+      overflow: hidden;
+      padding: 20px;
+      border-radius: 22px;
+      border: 1px solid rgba(242, 191, 209, 0.84);
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,244,248,0.92));
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+      transition: transform 0.18s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .pp-game-card::after {
+      content: '';
+      position: absolute;
+      right: -28px;
+      bottom: -34px;
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,79,148,0.12), transparent 70%);
+    }
+
+    .pp-game-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255,79,148,0.52);
+      box-shadow: 0 24px 42px rgba(39,56,102,0.16);
+    }
+
+    .pp-game-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pp-game-icon {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      border-radius: 16px;
+      border: 1px solid rgba(255,79,148,0.18);
+      background: linear-gradient(135deg, #fff7fa, #ffe2ee);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .pp-game-meta { flex: 1; min-width: 0; }
+
+    .pp-game-title {
+      font-family: 'Figtree', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pp-game-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .pp-game-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    .pp-game-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pp-game-footer-btns {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pp-dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-family: 'Figtree', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.18s, opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .pp-dl-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .pp-dl-btn-hosted {
+      background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(255,79,148,0.26);
+    }
+
+    .pp-dl-btn-external {
+      color: var(--navy);
+      border: 1px solid rgba(242,191,209,0.94);
+      background: rgba(255,255,255,0.76);
+    }
+
+    .pp-dl-btn-external:hover {
+      border-color: var(--border-hover);
+      color: var(--accent-strong);
+    }
+
+    /* Bookmark button */
+    .pp-bookmark-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(242,191,209,0.94);
+      background: rgba(255,255,255,0.76);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.18s;
+      flex-shrink: 0;
+    }
+
+    .pp-bookmark-btn:hover {
+      border-color: var(--accent);
+      transform: scale(1.1);
+    }
+
+    .pp-bookmark-btn svg {
+      transition: fill 0.2s, stroke 0.2s;
+    }
+
+    .pp-bookmark-btn.saved {
+      background: rgba(255,79,148,0.1);
+      border-color: rgba(255,79,148,0.4);
+    }
+
+    .pp-bookmark-btn.saved svg {
+      fill: var(--accent);
+      stroke: var(--accent);
+    }
+
+    .pp-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pp-tag-hosted {
+      color: var(--accent-strong);
+      border: 1px solid rgba(255,79,148,0.18);
+      background: rgba(255,79,148,0.1);
+    }
+
+    .pp-tag-external {
+      color: var(--navy);
+      border: 1px solid rgba(22,56,109,0.14);
+      background: var(--navy-soft);
+    }
+
+    .pp-tag-saved {
+      color: var(--safe);
+      border: 1px solid rgba(21,154,99,0.2);
+      background: var(--safe-bg);
+    }
+
+    .pp-section-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 28px 0 16px;
+    }
+
+    .pp-section-divider .pp-label { margin: 0; white-space: nowrap; }
+    .pp-section-divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(22,56,109,0.12), transparent);
+    }
+
+    .pp-empty-state {
+      grid-column: 1 / -1;
+      padding: 32px 20px;
+      text-align: center;
+      border-radius: 22px;
+      border: 1.5px dashed rgba(242,191,209,0.9);
+      background: rgba(255,255,255,0.5);
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .pp-empty-state .pp-empty-icon {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    /* Saved section */
+    #saved-section { display: none; }
+
+    .pp-saved-banner {
+      padding: 16px 20px;
+      border-radius: 22px;
+      border: 1px solid rgba(21,154,99,0.2);
+      background: linear-gradient(135deg, rgba(221,247,234,0.9), rgba(255,255,255,0.95));
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 4px;
+    }
+
+    .pp-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy);
+      color: #fff;
+      font-family: 'Figtree', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 12px 22px;
+      border-radius: 999px;
+      box-shadow: 0 12px 32px rgba(22,56,109,0.22);
+      z-index: 999;
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.3s;
+      opacity: 0;
+      white-space: nowrap;
+    }
+
+    .pp-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .pp-admin-hint {
+      display: none;
+      margin-top: 20px;
+      padding: 18px 20px;
+      border-radius: 22px;
+      border: 1px solid rgba(22,56,109,0.12);
+      background: linear-gradient(135deg, rgba(237,244,255,0.95), rgba(255,246,250,0.9));
+      color: var(--navy);
+      line-height: 1.7;
+      font-size: 13px;
+      box-shadow: var(--shadow-soft);
+      text-align: left;
+    }
+
+    .pp-admin-hint code {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      background: rgba(22,56,109,0.08);
+      padding: 1px 6px;
+      border-radius: 6px;
+      color: var(--accent-strong);
+    }
+
+    @media (max-width: 560px) {
+      .pp-game-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="pp-top-page">
+<main class="pp-shell">
+  <section class="pp-card pp-card-wide">
+
+    <!-- Header -->
+    <div class="pp-header">
+      <a href="/secret" class="pp-brand-lockup">
+        <img class="pp-brand-art" src="/images/pig-mascot.png" alt="PigProxy mascot">
+        <div class="pp-brand-text">
+          <div class="pp-wordmark"><span class="pig">Pig</span><span class="proxy">Proxy</span></div>
+          <p class="pp-tagline">snout your way through the web</p>
+        </div>
+      </a>
+      <span class="pp-badge pp-badge-accent">Games</span>
+    </div>
+
+    <!-- Intro banner -->
+    <div class="pp-dashboard-banner">
+      <p class="pp-label">Game library</p>
+      <h1 class="pp-section-title-sm">Download games or visit trusted sites</h1>
+      <p class="pp-section-copy">
+        Hit the bookmark button on any card to save it to your personal list. Your saves are stored on this device.
+      </p>
+      <div class="pp-chip-row">
+        <span class="pp-chip">Manually reviewed</span>
+        <span class="pp-chip">Safe for school</span>
+        <span class="pp-chip">💾 Bookmarks saved locally</span>
+      </div>
+    </div>
+
+    <!-- ═══ SAVED / BOOKMARKED SECTION ═══ -->
+    <div id="saved-section">
+      <div class="pp-section-divider">
+        <span class="pp-label">My saved</span>
+        <div class="pp-section-divider-line"></div>
+        <span class="pp-tag pp-tag-saved">Bookmarked</span>
+      </div>
+      <div class="pp-saved-banner">
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.6;">Your bookmarked games and sites show up here. Click the 🔖 button on any card to save or unsave it.</p>
+      </div>
+      <div class="pp-game-grid" id="saved-grid" style="margin-top:14px;"></div>
+    </div>
+
+    <!-- Hosted downloads -->
+    <div class="pp-section-divider">
+      <span class="pp-label">Hosted downloads</span>
+      <div class="pp-section-divider-line"></div>
+      <span class="pp-tag pp-tag-hosted">On-server</span>
+    </div>
+
+    <div class="pp-game-grid" id="hosted-grid">
+      <!--
+        ═══ HOW TO ADD A HOSTED GAME ═══
+        1. Upload your .exe / .zip / .rar to the /public/games/ folder
+        2. Uncomment and fill in the block below
+        3. Set href="/games/your-filename.zip" on the download button
+
+      <div class="pp-game-card" data-id="game-1" data-title="Game Name" data-sub="Windows · 45 MB" data-icon="🎮" data-desc="Short description." data-type="hosted" data-href="/games/your-file.zip">
+        <div class="pp-game-header">
+          <div class="pp-game-icon">🎮</div>
+          <div class="pp-game-meta">
+            <div class="pp-game-title">Game Name</div>
+            <div class="pp-game-sub">Windows · 45 MB</div>
+          </div>
+        </div>
+        <p class="pp-game-desc">Short description of the game.</p>
+        <div class="pp-game-footer">
+          <span class="pp-tag pp-tag-hosted">Hosted</span>
+          <div class="pp-game-footer-btns">
+            <button class="pp-bookmark-btn" onclick="toggleBookmark(this)" title="Bookmark this">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <a class="pp-dl-btn pp-dl-btn-hosted" href="/games/your-file.zip" download>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+            </a>
+          </div>
+        </div>
+      </div>
+      -->
+
+      <div class="pp-empty-state">
+        <span class="pp-empty-icon">📦</span>
+        No hosted games yet.<br>
+        <span style="font-size:12px;font-family:'DM Mono',monospace;">Drop files in <code style="font-family:'DM Mono',monospace;font-size:11px;background:rgba(22,56,109,0.08);padding:1px 5px;border-radius:5px;color:var(--accent-strong);">/public/games/</code> to get started.</span>
+      </div>
+    </div>
+
+    <!-- External links -->
+    <div class="pp-section-divider" style="margin-top:32px;">
+      <span class="pp-label">External links</span>
+      <div class="pp-section-divider-line"></div>
+      <span class="pp-tag pp-tag-external">Off-site</span>
+    </div>
+
+    <div class="pp-game-grid">
+
+      <div class="pp-game-card" data-id="itchio" data-title="itch.io" data-sub="External · Free games" data-icon="🎲" data-desc="Thousands of free indie games from independent developers worldwide." data-type="external" data-href="https://itch.io">
+        <div class="pp-game-header">
+          <div class="pp-game-icon">🎲</div>
+          <div class="pp-game-meta">
+            <div class="pp-game-title">itch.io</div>
+            <div class="pp-game-sub">External · Free games</div>
+          </div>
+        </div>
+        <p class="pp-game-desc">Thousands of free indie games. Browse, download, and play games made by independent developers worldwide.</p>
+        <div class="pp-game-footer">
+          <span class="pp-tag pp-tag-external">External</span>
+          <div class="pp-game-footer-btns">
+            <button class="pp-bookmark-btn" onclick="toggleBookmark(this)" title="Bookmark this">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <a class="pp-dl-btn pp-dl-btn-external" href="https://itch.io" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Visit Site
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pp-game-card" data-id="coolmath" data-title="Coolmath Games" data-sub="External · Browser games" data-icon="🧮" data-desc="Free browser-based games and puzzles. No download needed, school-friendly." data-type="external" data-href="https://www.coolmathgames.com">
+        <div class="pp-game-header">
+          <div class="pp-game-icon">🧮</div>
+          <div class="pp-game-meta">
+            <div class="pp-game-title">Coolmath Games</div>
+            <div class="pp-game-sub">External · Browser games</div>
+          </div>
+        </div>
+        <p class="pp-game-desc">Free browser-based games and puzzles. No download needed — play directly in your browser, school-friendly.</p>
+        <div class="pp-game-footer">
+          <span class="pp-tag pp-tag-external">External</span>
+          <div class="pp-game-footer-btns">
+            <button class="pp-bookmark-btn" onclick="toggleBookmark(this)" title="Bookmark this">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <a class="pp-dl-btn pp-dl-btn-external" href="https://www.coolmathgames.com" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Visit Site
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pp-game-card" data-id="gamebanana" data-title="GameBanana" data-sub="External · Mods &amp; files" data-icon="🏆" data-desc="Mods, maps, and downloads for hundreds of popular games." data-type="external" data-href="https://gamebanana.com">
+        <div class="pp-game-header">
+          <div class="pp-game-icon">🏆</div>
+          <div class="pp-game-meta">
+            <div class="pp-game-title">GameBanana</div>
+            <div class="pp-game-sub">External · Mods &amp; files</div>
+          </div>
+        </div>
+        <p class="pp-game-desc">Mods, maps, and downloads for hundreds of popular games. A large community-driven game file library.</p>
+        <div class="pp-game-footer">
+          <span class="pp-tag pp-tag-external">External</span>
+          <div class="pp-game-footer-btns">
+            <button class="pp-bookmark-btn" onclick="toggleBookmark(this)" title="Bookmark this">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <a class="pp-dl-btn pp-dl-btn-external" href="https://gamebanana.com" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Visit Site
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pp-game-card" data-id="poki" data-title="Poki" data-sub="External · Browser games" data-icon="🕹️" data-desc="A huge library of free browser games. Fast loading, no installs, works on any device." data-type="external" data-href="https://poki.com">
+        <div class="pp-game-header">
+          <div class="pp-game-icon">🕹️</div>
+          <div class="pp-game-meta">
+            <div class="pp-game-title">Poki</div>
+            <div class="pp-game-sub">External · Browser games</div>
+          </div>
+        </div>
+        <p class="pp-game-desc">A huge library of free browser games across every genre. Fast loading, no installs, works on any device.</p>
+        <div class="pp-game-footer">
+          <span class="pp-tag pp-tag-external">External</span>
+          <div class="pp-game-footer-btns">
+            <button class="pp-bookmark-btn" onclick="toggleBookmark(this)" title="Bookmark this">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </button>
+            <a class="pp-dl-btn pp-dl-btn-external" href="https://poki.com" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Visit Site
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Admin hint -->
+    <div class="pp-admin-hint" id="admin-hint">
+      <strong style="font-weight:600;color:var(--navy);">How to add hosted games (admin only)</strong><br>
+      1. Upload your file to <code>/public/games/</code> on the server.<br>
+      2. Open <code>public/games.html</code> and uncomment the hosted game card template.<br>
+      3. Set the <code>href</code> to <code>/games/your-filename.zip</code> and fill in title, size, and description.<br>
+      4. Restart the server — it shows up immediately.
+    </div>
+
+    <div class="pp-responsible">
+      <strong>Keep it appropriate.</strong> Only download games you are allowed to have on school devices. Check with your teacher or school IT if you are unsure.
+    </div>
+
+    <div class="pp-inline-actions pp-actions-footer">
+      <a href="/secret" class="pp-btn-ghost pp-btn-inline">Back to Dashboard</a>
+    </div>
+
+  </section>
+</main>
+
+<!-- Toast notification -->
+<div class="pp-toast" id="toast"></div>
+
+<script>
+  // ── Admin hint ──
+  const u = document.cookie.split('; ').find(r => r.startsWith('username='))?.split('=')[1];
+  if (u === 'admin') document.getElementById('admin-hint').style.display = 'block';
+
+  // ── Bookmark system ──
+  const STORAGE_KEY = 'pigproxy_bookmarks';
+
+  function getBookmarks() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch { return {}; }
+  }
+
+  function saveBookmarks(bm) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(bm));
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  function toggleBookmark(btn) {
+    const card = btn.closest('.pp-game-card');
+    const id = card.dataset.id;
+    const bm = getBookmarks();
+
+    if (bm[id]) {
+      delete bm[id];
+      btn.classList.remove('saved');
+      showToast('Bookmark removed');
+    } else {
+      bm[id] = {
+        id,
+        title: card.dataset.title,
+        sub: card.dataset.sub,
+        icon: card.dataset.icon,
+        desc: card.dataset.desc,
+        type: card.dataset.type,
+        href: card.dataset.href
+      };
+      btn.classList.add('saved');
+      showToast('🔖 Saved to your bookmarks!');
+    }
+
+    saveBookmarks(bm);
+    renderSaved();
+  }
+
+  function renderSaved() {
+    const bm = getBookmarks();
+    const keys = Object.keys(bm);
+    const section = document.getElementById('saved-section');
+    const grid = document.getElementById('saved-grid');
+
+    if (!keys.length) {
+      section.style.display = 'none';
+      return;
+    }
+
+    section.style.display = 'block';
+    grid.innerHTML = keys.map(id => {
+      const g = bm[id];
+      const isHosted = g.type === 'hosted';
+      const actionBtn = isHosted
+        ? `<a class="pp-dl-btn pp-dl-btn-hosted" href="${g.href}" download>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download
+           </a>`
+        : `<a class="pp-dl-btn pp-dl-btn-external" href="${g.href}" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Visit Site
+           </a>`;
+
+      return `
+        <div class="pp-game-card" data-id="${g.id}" data-title="${g.title}" data-sub="${g.sub}" data-icon="${g.icon}" data-desc="${g.desc}" data-type="${g.type}" data-href="${g.href}">
+          <div class="pp-game-header">
+            <div class="pp-game-icon">${g.icon}</div>
+            <div class="pp-game-meta">
+              <div class="pp-game-title">${g.title}</div>
+              <div class="pp-game-sub">${g.sub}</div>
+            </div>
+          </div>
+          <p class="pp-game-desc">${g.desc}</p>
+          <div class="pp-game-footer">
+            <span class="pp-tag pp-tag-saved">Saved</span>
+            <div class="pp-game-footer-btns">
+              <button class="pp-bookmark-btn saved" onclick="toggleBookmark(this)" title="Remove bookmark">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+              </button>
+              ${actionBtn}
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── Init: mark already-saved cards on page load ──
+  function initBookmarkStates() {
+    const bm = getBookmarks();
+    document.querySelectorAll('.pp-game-card[data-id]').forEach(card => {
+      if (bm[card.dataset.id]) {
+        const btn = card.querySelector('.pp-bookmark-btn');
+        if (btn) {
+          btn.classList.add('saved');
+          btn.querySelector('svg').setAttribute('fill', 'var(--accent)');
+        }
+      }
+    });
+  }
+
+  renderSaved();
+  initBookmarkStates();
+</script>
+</body>
+</html>

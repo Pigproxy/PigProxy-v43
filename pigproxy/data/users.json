@@ -3,6 +3,10 @@
     "admin": {
       "password": "edbb41cfd2eb15b1c1f30caf26250415f373024f82640a1963c0c1f098cddf57",
       "salt": "19f58d1506da9ea25c77cff835202e1b"
+    },
+    "ethan": {
+      "password": "11f902f8cc072b3dcd800a557f07f2a668a036d85c49c6fee2e6907dfdc8c1cc",
+      "salt": "14975304b2ab6bd77e2e6f5b299683b5"
     }
   }
 }

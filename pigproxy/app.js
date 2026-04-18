@@ -428,6 +428,10 @@ app.get('/secret', requireAuth, (req, res) => {
   res.sendFile(__dirname + '/public/secret.html');
 });
 
+app.get('/games', requireAuth, (req, res) => {
+  res.sendFile(__dirname + '/public/games.html');
+});
+
 app.get('/profile', requireAuth, (req, res) => {
   res.sendFile(__dirname + '/public/profile.html');
 });
