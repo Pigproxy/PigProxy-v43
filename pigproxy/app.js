@@ -21,8 +21,8 @@ if (!config.prefix.endsWith('/')) {
 let server;
 let server_protocol;
 const server_options = {
-  key: fs.readFileSync('./ssl/default.key'),
-  cert: fs.readFileSync('./ssl/default.crt')
+  key: fs.readFileSync(process.env.SSL_DEFAULT_KEY),
+  cert: fs.readFileSync(process.env.SSL_DEFAULT_CERT)
 }
 if (config.ssl == true) { server = https.createServer(server_options, app); server_protocol = 'https://';}
 else { server = http.createServer(app); server_protocol = 'http://';};
